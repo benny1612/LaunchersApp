@@ -41,3 +41,11 @@ export const deleteLauncher = async (id)=>{
     console.log(error);
   }
 }
+
+export const Updatelauncher = async (id,updeteData)=>{
+    try{
+        const response = await axios.put(`http://localhost:3000/api/launchers/${id}`,updeteData)
+    }catch(error){
+        console.log(error)
+    }
+}
