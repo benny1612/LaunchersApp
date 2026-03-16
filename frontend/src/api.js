@@ -29,3 +29,15 @@ export const addLauncher = async (newLauncher) => {
     console.log(error);
   }
 };
+
+export const deleteLauncher = async (id)=>{
+    try{
+        const response = await axios.delete(`http://localhost:3000/api/launchers/${id}`
+           
+
+        )
+         return response.data
+    } catch (error) {
+    console.log(error);
+  }
+}
