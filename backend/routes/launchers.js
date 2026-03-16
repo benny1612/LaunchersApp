@@ -4,6 +4,20 @@ import { getDb } from '../db.js';
 
 const router = express.Router();
 
+router.get('/', async (req, res) => {
+  try {
+    const db = getDb();
+    
+    const launchers = await db.collection('launchers').find({}).toArray();
+    
+    res.json(launchers);
+  } catch (error) {
+    res.status(500).json({ msg: "internal server error" });
+  }
+});
+
+
+
 
 
 router.post('/', async (req, res) => {
