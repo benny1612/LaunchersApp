@@ -1,48 +1,77 @@
-import React, { useEffect, useState } from 'react'
-import { Link } from 'react-router-dom'
-import { getAllLaunchers } from '../api'
+import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
+import { getAllLaunchers } from "../api";
 
 export default function Home() {
-  const [launchers, setLaunchers] = useState([])
-
-  const loadData = async () => {
+  const [list, setList] = useState([]);
+  const [city, setCity] = useState("");
+  const [type, setType] = useState("");
+  async function getData() {
     try {
-      const data = await getAllLaunchers()
-      setLaunchers(data)
+      const data = await getAllLaunchers();
+      setList(data);
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
   }
-
   useEffect(() => {
-    loadData()
-  }, [])
+    getData();
+  }, []);
+
+  const filteredList = list.filter((item) => {
+    if (
+      city !== "" &&
+      item.city.toLowerCase().includes(city.toLowerCase()) === false
+    ) {
+      return false;
+    }
+
+    if (type !== "" && item.rocketType !== type) {
+      return false;
+    }
+
+    return true;
+  });
 
   return (
-    <div >
-      
-        <p className="text-2xl ">Launchers</p>
-       
-      
+    <div>
+      <h1 className="text-2xl font-bold">Launchers</h1>
 
-      <div className="space-y-4">
-        {launchers && launchers.map((l) => (
-          <div key={l._id} className=" border flex justify-between items-center ">
-            <div>
-              <p >name: {l.name}</p>
-              <p>rocketType: {l.rocketType} </p>
-              <p>city: {l.city}</p>
-              <p>latitude: {l.latitude} </p>
-              <p>longitude: {l.longitude}</p>
-              <p>id: {l._id}</p>
-            </div>
-            
-            <Link to={`/details/${l._id}`} >
-               details
+      <div className="flex gap-2 ">
+        <input
+    
+          placeholder="Search City"
+          value={city}
+          onChange={(e) => setCity(e.target.value)}
+        />
+
+        <select
+          value={type}
+          onChange={(e) => setType(e.target.value)}
+        >
+          <option value="">All Types</option>
+          <option value="Shahab3">Shahab3</option>
+          <option value="Fetah110">Fetah110</option>
+          <option value="Radwan">Radwan</option>
+          <option value="Kheibar">Kheibar</option>
+        </select>
+      </div>
+
+      <div>
+        {list && filteredList.map((item) => (
+          <div key={item._id} className="p-4">
+            <p>Name: {item.name}</p>
+            <p>Type: {item.rocketType}</p>
+            <p>City: {item.city}</p>
+            <Link
+              to={`/details/${item._id}`}
+              className="text-blue-500"
+            >
+              Details And Delete
             </Link>
           </div>
         ))}
       </div>
     </div>
-  )
+  );
 }
