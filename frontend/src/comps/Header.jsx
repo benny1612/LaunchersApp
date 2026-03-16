@@ -8,7 +8,6 @@ export default function Header() {
         <div className="flex gap-6">
           <Link to="/">Home</Link>
           <Link to="/add">Add Launcher</Link>
-          <Link to ='/details'>Launcher details</Link>
         </div>
       </div>
     </nav>
