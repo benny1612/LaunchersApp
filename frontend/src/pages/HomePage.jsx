@@ -67,7 +67,7 @@ export default function Home() {
               to={`/details/${item._id}`}
               className="text-blue-500"
             >
-              Details And Delete
+              Details And Delete or Update
             </Link>
           </div>
         ))}
