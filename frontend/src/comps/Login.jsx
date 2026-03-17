@@ -9,10 +9,10 @@ export default function Login() {
 
   const handleLogin = async (e) => {
     e.preventDefault();
-    const userCredentials = { username, password };
+    const userInfo = { username, password };
 
     try {
-      const data = await login(userCredentials);
+      const data = await login(userInfo);
       if (data && data.success) {
         localStorage.setItem("token", data.token);
         localStorage.setItem("user", JSON.stringify(data.user));
@@ -25,9 +25,9 @@ export default function Login() {
 
   return (
     <div className="p-4">
-      <form onSubmit={handleLogin}className="mt-5">
+      <form onSubmit={handleLogin} className="mt-5">
         <h2 className="text-2xl text-center">Login</h2>
-        
+
         <div className="space-y-7">
           <input
             type="text"
@@ -36,7 +36,7 @@ export default function Login() {
             className=" w-full border-b"
             required
           />
-          
+
           <input
             type="password"
             placeholder="Password"
@@ -44,11 +44,8 @@ export default function Login() {
             className="w-full border-b"
             required
           />
-          
-          <button
-            type="submit"
-            className="w-50  bg-black text-white p-5"
-          >
+
+          <button type="submit" className="w-50  bg-black text-white p-5">
             SIGN IN
           </button>
         </div>
