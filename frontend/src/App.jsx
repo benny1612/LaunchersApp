@@ -5,6 +5,9 @@ import Login from './comps/Login'
 import HomePage from './pages/HomePage'
 import AddLauncherPage from './pages/AddLauncherPage'
 import LauncherDetailsPage from './pages/LauncherDetailsPage'
+import EditUserPage from './pages/EditUserPage'
+import RegisterPage from './pages/RegisterPage'
+import AdminPage from './pages/AdminPage'
 
 export default function App() {
   return (
@@ -16,6 +19,9 @@ export default function App() {
               <Route path="/" element={<HomePage />} />
 
             <Route path="/home" element={<HomePage />} />
+            <Route path="/editUser/:id" element={<EditUserPage />} />
+            <Route path="/RegisterPage" element={<RegisterPage />} />
+            <Route path="/AdminPage" element={<AdminPage />} />
 
           <Route path="/add" element={<AddLauncherPage />} />
           <Route path="/details/:id" element={<LauncherDetailsPage />} />
