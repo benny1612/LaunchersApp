@@ -2,7 +2,7 @@ import express from "express";
 import { ObjectId } from "mongodb";
 
 import { getDb } from "../db.js";
-
+import { createToken } from "../utils/jwtUtils.js";
 const router = express.Router();
 
 router.post("/register/create", async (req, res) => {
@@ -77,18 +77,46 @@ router.delete("/register/delete/:id", async (req, res) => {
     const id = req.params;
 
     const db = getDb();
- const result = await db.collection("users").deleteOne({
+    const result = await db.collection("users").deleteOne({
       _id: new ObjectId(id),
     });
-      if (result.deletedCount === 0) {
-      res.status(404).json({success: false, msg: "user not found" });
+    if (result.deletedCount === 0) {
+      res.status(404).json({ success: false, msg: "user not found" });
     }
-        res
-      .status(200)
-      .json({success: true, msg: `user deleted ` });
-
+    res.status(200).json({ success: true, msg: `user deleted ` });
   } catch (error) {
     console.log(error);
+    res.status(500).json({ success: false, msg: "internal server error" });
+  }
+});
+router.post("/login", async (req, res) => {
+  try {
+    const db = getDb();
+    const { username, password } = req.body;
+
+    const user = await db.collection("users").findOne({ username, password });
+
+    if (!user) {
+      return res
+        .status(401)
+        .json({ success: false, msg: "Invalid username or password" });
+    }
+
+    await db
+      .collection("users")
+      .updateOne({ _id: user._id }, { $set: { login_last: Date.now() } });
+
+    const token = createToken(user);
+
+    res.status(200).json({
+      success: true,
+      token,
+      user: {
+        username: user.username,
+        user_type: user.user_type,
+      },
+    });
+  } catch (error) {
     res.status(500).json({ success: false, msg: "internal server error" });
   }
 });
