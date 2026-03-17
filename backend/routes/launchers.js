@@ -1,10 +1,11 @@
 import express from "express";
 import { ObjectId } from "mongodb";
 import { getDb } from "../db.js";
+import { protect ,isAirForce,isIntelligence } from "../middleware/authMiddleware.js";
 
 const router = express.Router();
 
-router.get("/", async (req, res) => {
+router.get("/",protect, async (req, res) => {
   try {
     const db = getDb();
 
@@ -15,7 +16,7 @@ router.get("/", async (req, res) => {
     res.status(500).json({ msg: "internal server error" });
   }
 });
-router.get("/:id", async (req, res) => {
+router.get("/:id",protect, async (req, res) => {
   try {
     const db = getDb();
     const id = req.params.id;
@@ -34,7 +35,7 @@ router.get("/:id", async (req, res) => {
   }
 });
 
-router.delete("/:id", async (req, res) => {
+router.delete("/:id",protect,isIntelligence, async (req, res) => {
   try {
     const db = getDb();
     const id = req.params.id;
@@ -52,7 +53,7 @@ router.delete("/:id", async (req, res) => {
   }
 });
 
-router.post("/", async (req, res) => {
+router.post("/",protect,isIntelligence, async (req, res) => {
   try {
     const db = getDb();
     const { name, rocketType, latitude, longitude, city } = req.body;
@@ -82,7 +83,7 @@ router.post("/", async (req, res) => {
   }
 });
 
-router.put("/:id", async (req, res) => {
+router.put("/:id",protect,isIntelligence, async (req, res) => {
   try {
     const db = getDb();
     const { id } = req.params;
@@ -114,5 +115,22 @@ router.put("/:id", async (req, res) => {
     res.status(500).json({ msg: "internal server error" });
   }
 });
-
+router.put("/destroyed/:id",protect,isAirForce, async (req, res) => {
+  try {
+    const db = getDb();
+    const { id } = req.params;
+    const { destroyed } = req.body;
+    const updateData = {};
+    if(destroyed){updateData.destroyed=destroyed}
+    if (Object.keys(updateData).length === 0) {
+      return res.status(400).json({ msg: "Nothing was updated" });
+    }
+    const updateLauncher = await db
+      .collection("launchers")
+      .updateOne({ _id: new ObjectId(id) }, { $set: updateData });
+    res.status(200).json({ msg: "filed update" });
+  } catch (error) {
+    res.status(500).json({ msg: "internal server error" });
+  }
+});
 export default router;
