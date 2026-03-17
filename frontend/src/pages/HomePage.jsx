@@ -36,6 +36,7 @@ export default function Home() {
   return (
     <div>
       <h1 className="text-2xl font-bold">Launchers</h1>
+      <Link to="/add">Add Launcher </Link>
 
       <div className="flex gap-2 ">
         <input
