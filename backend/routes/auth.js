@@ -145,4 +145,16 @@ router.get("/getUser", async (req, res) => {
     res.status(401).json({ success: false, msg: "Invalid token" });
   }
 });
+
+
+router.get("/getAllUsers",async(req,res)=>{
+    try{
+        const db=getDb()
+        const allUsers= await db.collection("users").find({}).toArray();
+        res.status(200).json({success: true,allUsers})
+    }
+    catch(error){    console.log(error);
+    res.status(500).json({ success: false, msg: "internal server error" });
+}
+})
 export default router;
