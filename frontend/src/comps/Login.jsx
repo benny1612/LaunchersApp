@@ -16,7 +16,7 @@ export default function Login() {
       if (data && data.success) {
         localStorage.setItem("token", data.token);
         localStorage.setItem("user", JSON.stringify(data.user));
-        navigate("/");
+        navigate("/AdminPage");
       }
     } catch (error) {
       console.log(error);
@@ -46,7 +46,7 @@ export default function Login() {
           />
 
           <button type="submit" className="w-50  bg-black text-white p-5">
-            SIGN IN
+            log in
           </button>
         </div>
       </form>
