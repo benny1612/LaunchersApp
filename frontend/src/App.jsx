@@ -8,6 +8,7 @@ import LauncherDetailsPage from './pages/LauncherDetailsPage'
 import EditUserPage from './pages/EditUserPage'
 import RegisterPage from './pages/RegisterPage'
 import AdminPage from './pages/AdminPage'
+import UsersPage from './pages/UsersPage'
 
 export default function App() {
   return (
@@ -22,6 +23,7 @@ export default function App() {
             <Route path="/editUser/:id" element={<EditUserPage />} />
             <Route path="/RegisterPage" element={<RegisterPage />} />
             <Route path="/AdminPage" element={<AdminPage />} />
+            <Route path="/UsersPage" element={<UsersPage />} />
 
           <Route path="/add" element={<AddLauncherPage />} />
           <Route path="/details/:id" element={<LauncherDetailsPage />} />
