@@ -3,7 +3,7 @@ import express from 'express';
 import cors from 'cors';
 import { connectToDb } from './db.js';
 import launcherRouter from './routes/launchers.js';
-import authRouter from './routes/launchers.js';
+import authRouter from './routes/auth.js';
 
 const app = express();
 
