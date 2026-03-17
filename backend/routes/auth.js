@@ -2,7 +2,7 @@ import express from "express";
 import { ObjectId } from "mongodb";
 
 import { getDb } from "../db.js";
-import { createToken } from "../utils/jwtUtils.js";
+import { createToken,verifyToken } from "../utils/jwtUtils.js";
 const router = express.Router();
 
 router.post("/register/create", async (req, res) => {
@@ -118,6 +118,31 @@ router.post("/login", async (req, res) => {
     });
   } catch (error) {
     res.status(500).json({ success: false, msg: "internal server error" });
+  }
+});
+router.get("/getUser", async (req, res) => {
+  try {
+    const token = req.headers.authorization;
+
+    if (!token) {
+      return res.status(401).json({ success: false, msg: "missing token" });
+    }
+
+    const decoded = verifyToken(token);
+    const db = getDb();
+
+    const user = await db.collection("users").findOne(
+      { _id: new ObjectId(decoded.id) },
+    );
+
+    if (!user) {
+      return res.status(404).json({ success: false, msg: "User not found" });
+    }
+
+    res.status(200).json({ success: true, user });
+
+  } catch (error) {
+    res.status(401).json({ success: false, msg: "Invalid token" });
   }
 });
 export default router;
