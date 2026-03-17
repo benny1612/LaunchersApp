@@ -9,7 +9,7 @@ import EditUserPage from './pages/EditUserPage'
 import RegisterPage from './pages/RegisterPage'
 import AdminPage from './pages/AdminPage'
 import UsersPage from './pages/UsersPage'
-
+import AdminGuard from './comps/AdminGuard'
 export default function App() {
   return (
     <BrowserRouter>
@@ -17,13 +17,13 @@ export default function App() {
         <Routes>
                       <Route path="/login" element={<Login />} />
 
-              <Route path="/" element={<HomePage />} />
+              <Route path="/" element={<Login />} />
 
             <Route path="/home" element={<HomePage />} />
-            <Route path="/editUser/:id" element={<EditUserPage />} />
-            <Route path="/RegisterPage" element={<RegisterPage />} />
-            <Route path="/AdminPage" element={<AdminPage />} />
-            <Route path="/UsersPage" element={<UsersPage />} />
+            <Route path="/editUser/:id" element={<AdminGuard><EditUserPage /></AdminGuard>} />
+            <Route path="/RegisterPage" element={<AdminGuard><RegisterPage /></AdminGuard>} />
+            <Route path="/AdminPage" element={<AdminGuard><AdminPage /></AdminGuard>} />
+            <Route path="/UsersPage" element={<AdminGuard><UsersPage /></AdminGuard>} />
 
           <Route path="/add" element={<AddLauncherPage />} />
           <Route path="/details/:id" element={<LauncherDetailsPage />} />
