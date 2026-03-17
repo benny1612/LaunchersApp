@@ -10,7 +10,10 @@ export default function App() {
     <BrowserRouter>
       <Header />
         <Routes>
-          <Route path="/" element={<HomePage />} />
+              <Route path="/" element={<HomePage />} />
+
+            <Route path="/home" element={<HomePage />} />
+
           <Route path="/add" element={<AddLauncherPage />} />
           <Route path="/details/:id" element={<LauncherDetailsPage />} />
         </Routes>
