@@ -6,8 +6,9 @@ export default function Header() {
     <nav className="bg-red-800 text-white p-4">
       <div className="flex justify-between items-center">
         <div className="flex gap-6">
-          <Link to="/">Home</Link>
-          <Link to="/add">Add Launcher</Link>
+          <Link to="/home">Home</Link>
+                    <Link to="/login">login</Link>
+
         </div>
       </div>
     </nav>
