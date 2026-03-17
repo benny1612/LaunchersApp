@@ -1,11 +1,11 @@
 import express from "express";
 import { ObjectId } from "mongodb";
-
+import { protect, isAdmin } from "../middleware/authMiddleware.js";
 import { getDb } from "../db.js";
 import { createToken,verifyToken } from "../utils/jwtUtils.js";
 const router = express.Router();
 
-router.post("/register/create", async (req, res) => {
+router.post("/register/create",protect,isAdmin, async (req, res) => {
   try {
     const db = getDb();
     const { username, password, email, user_type } = req.body;
@@ -39,7 +39,7 @@ router.post("/register/create", async (req, res) => {
   }
 });
 
-router.put("/register/update/:id", async (req, res) => {
+router.put("/register/update/:id",protect,isAdmin, async (req, res) => {
   try {
     const id = req.params;
     const updateData = {};
@@ -72,7 +72,7 @@ router.put("/register/update/:id", async (req, res) => {
     res.status(500).json({ success: false, msg: "internal server error" });
   }
 });
-router.delete("/register/delete/:id", async (req, res) => {
+router.delete("/register/delete/:id",protect,isAdmin, async (req, res) => {
   try {
     const id = req.params;
 
@@ -120,19 +120,11 @@ router.post("/login", async (req, res) => {
     res.status(500).json({ success: false, msg: "internal server error" });
   }
 });
-router.get("/getUser", async (req, res) => {
+router.get("/getUser", protect, async (req, res) => {
   try {
-    const token = req.headers.authorization;
-
-    if (!token) {
-      return res.status(401).json({ success: false, msg: "missing token" });
-    }
-
-    const decoded = verifyToken(token);
     const db = getDb();
-
     const user = await db.collection("users").findOne(
-      { _id: new ObjectId(decoded.id) },
+      { _id: new ObjectId(req.user.id) },
     );
 
     if (!user) {
@@ -140,14 +132,14 @@ router.get("/getUser", async (req, res) => {
     }
 
     res.status(200).json({ success: true, user });
-
   } catch (error) {
-    res.status(401).json({ success: false, msg: "Invalid token" });
+    res.status(500).json({ success: false, msg: "internal server error" });
   }
 });
 
 
-router.get("/getAllUsers",async(req,res)=>{
+
+router.get("/getAllUsers",protect,isAdmin,async(req,res)=>{
     try{
         const db=getDb()
         const allUsers= await db.collection("users").find({}).toArray();
