@@ -41,7 +41,7 @@ router.post("/register/create", async (req, res) => {
 
 router.put("/register/update/:id", async (req, res) => {
   try {
-    const id =req.params
+    const id = req.params;
     const updateData = {};
 
     const db = getDb();
@@ -58,19 +58,38 @@ router.put("/register/update/:id", async (req, res) => {
     if (user_type) {
       updateData.user_type = user_type;
     }
-     if (Object.keys(updateData).length === 0) {
-      return res.status(400).json({success: false, msg: "Nothing was updated" });
+    if (Object.keys(updateData).length === 0) {
+      return res
+        .status(400)
+        .json({ success: false, msg: "Nothing was updated" });
     }
     const updateUser = await db
       .collection("users")
       .updateOne({ _id: new ObjectId(id) }, { $set: updateData });
     res.status(200).json({ success: true, msg: "filed update" });
-
-    
   } catch (error) {
     console.log(error);
     res.status(500).json({ success: false, msg: "internal server error" });
   }
 });
+router.delete("/register/delete/:id", async (req, res) => {
+  try {
+    const id = req.params;
 
+    const db = getDb();
+ const result = await db.collection("users").deleteOne({
+      _id: new ObjectId(id),
+    });
+      if (result.deletedCount === 0) {
+      res.status(404).json({success: false, msg: "user not found" });
+    }
+        res
+      .status(200)
+      .json({success: true, msg: `user deleted ` });
+
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ success: false, msg: "internal server error" });
+  }
+});
 export default router;
